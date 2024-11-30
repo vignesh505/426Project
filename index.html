@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medication Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Medication Tracker</h1>
+    <nav>
+      <ul id="nav-links">
+        <li><a href="#" id="logout-btn" style="display:none;">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section id="auth-container">
+      <h2>Welcome Back</h2>
+      <form id="login-form" class="form-card">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username" required>
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+        
+        <button type="submit">Login</button>
+      </form>
+    </section>
+
+
+    <section id="dashboard" style="display: none;">
+      <div class="section-header">
+        <h2>Your Medications</h2>
+        <button id="add-btn" class="primary-btn">Add Medication</button>
+      </div>
+      
+      <ul id="medication-list">
+
+      </ul>
+
+      <form id="add-medication-form" class="form-card" style="display: none;">
+        <h3>Add Medication</h3>
+        <label for="medication-name">Name</label>
+        <input type="text" id="medication-name" placeholder="e.g., Aspirin" required>
+        
+        <label for="medication-dosage">Dosage</label>
+        <input type="text" id="medication-dosage" placeholder="e.g., 500mg" required>
+        
+        <label for="medication-frequency">Frequency</label>
+        <input type="text" id="medication-frequency" placeholder="e.g., Once daily" required>
+        
+        <label for="medication-time">Time</label>
+        <input type="time" id="medication-time" required>
+        
+        <button type="submit">Save Medication</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Medication Tracker. All Rights Reserved.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
