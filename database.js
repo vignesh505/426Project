@@ -1,6 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/medication-tracker.db');
-
+const db = new sqlite3.Database('./medication-tracker.db');
 
 db.run(`
   CREATE TABLE IF NOT EXISTS users (
@@ -9,7 +8,6 @@ db.run(`
     password TEXT NOT NULL
   )
 `);
-
 
 db.run(`
   CREATE TABLE IF NOT EXISTS medications (
