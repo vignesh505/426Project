@@ -1,25 +1,27 @@
+const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
 const addMedicationForm = document.getElementById('add-medication-form');
 const medicationList = document.getElementById('medication-list');
 const authContainer = document.getElementById('auth-container');
 const dashboard = document.getElementById('dashboard');
-const logoutBtn = document.getElementById('logout-btn');
-const addBtn = document.getElementById('add-btn');
 
-let token = null;
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('reg-username').value;
+  const password = document.getElementById('reg-password').value;
 
-function showDashboard() {
-  authContainer.style.display = 'none';
-  dashboard.style.display = 'block';
-  logoutBtn.style.display = 'inline-block';
-  loadMedications();
-}
+  const response = await fetch('/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
 
-function showLogin() {
-  authContainer.style.display = 'block';
-  dashboard.style.display = 'none';
-  logoutBtn.style.display = 'none';
-}
+  if (response.ok) {
+    alert('Registration successful! Please log in.');
+  } else {
+    alert('Registration failed. Username may already exist.');
+  }
+});
 
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -33,42 +35,16 @@ loginForm.addEventListener('submit', async (e) => {
   });
 
   if (response.ok) {
-    token = await response.json();
-    showDashboard();
+    authContainer.style.display = 'none';
+    dashboard.style.display = 'block';
+    loadMedications();
   } else {
-    alert('Invalid login credentials');
+    alert('Invalid login credentials.');
   }
 });
 
-async function loadMedications() {
-  const response = await fetch('/medications', {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  if (response.ok) {
-    const medications = await response.json();
-    medicationList.innerHTML = medications
-      .map(
-        (med) => `
-      <li>
-        <div>
-          <strong>${med.name}</strong>
-          <p>${med.dosage} | ${med.frequency} | ${med.time}</p>
-        </div>
-        <button class="delete-btn" data-id="${med.id}">Delete</button>
-      </li>
-    `
-      )
-      .join('');
-    attachDeleteHandlers();
-  } else {
-    alert('Failed to load medications.');
-  }
-}
-
 addMedicationForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const name = document.getElementById('medication-name').value;
   const dosage = document.getElementById('medication-dosage').value;
   const frequency = document.getElementById('medication-frequency').value;
@@ -76,10 +52,7 @@ addMedicationForm.addEventListener('submit', async (e) => {
 
   const response = await fetch('/medications', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, dosage, frequency, time }),
   });
 
@@ -91,30 +64,19 @@ addMedicationForm.addEventListener('submit', async (e) => {
   }
 });
 
-function attachDeleteHandlers() {
-  document.querySelectorAll('.delete-btn').forEach((btn) =>
-    btn.addEventListener('click', async (e) => {
-      const id = btn.getAttribute('data-id');
-      const response = await fetch(`/medications/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
-        loadMedications();
-      } else {
-        alert('Failed to delete medication');
-      }
-    })
-  );
+async function loadMedications() {
+  const response = await fetch('/medications');
+  if (response.ok) {
+    const medications = await response.json();
+    medicationList.innerHTML = medications
+      .map(
+        (med) =>
+          `<li><strong>${med.name}</strong>: ${med.dosage}, ${med.frequency} at ${med.time}</li>`
+      )
+      .join('');
+  } else {
+    alert('Failed to load medications.');
+  }
 }
 
-addBtn.addEventListener('click', () => {
-  addMedicationForm.style.display =
-    addMedicationForm.style.display === 'none' ? 'block' : 'none';
-});
-
-logoutBtn.addEventListener('click', () => {
-  token = null;
-  showLogin();
-});
 
