@@ -1,4 +1,3 @@
-
 const loginForm = document.getElementById('login-form');
 const addMedicationForm = document.getElementById('add-medication-form');
 const medicationList = document.getElementById('medication-list');
@@ -9,7 +8,6 @@ const addBtn = document.getElementById('add-btn');
 
 let token = null;
 
-
 function showDashboard() {
   authContainer.style.display = 'none';
   dashboard.style.display = 'block';
@@ -17,13 +15,11 @@ function showDashboard() {
   loadMedications();
 }
 
-
 function showLogin() {
   authContainer.style.display = 'block';
   dashboard.style.display = 'none';
   logoutBtn.style.display = 'none';
 }
-
 
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -43,7 +39,6 @@ loginForm.addEventListener('submit', async (e) => {
     alert('Invalid login credentials');
   }
 });
-
 
 async function loadMedications() {
   const response = await fetch('/medications', {
@@ -67,10 +62,9 @@ async function loadMedications() {
       .join('');
     attachDeleteHandlers();
   } else {
-    alert('Failed to load medications');
+    alert('Failed to load medications.');
   }
 }
-
 
 addMedicationForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -93,10 +87,9 @@ addMedicationForm.addEventListener('submit', async (e) => {
     loadMedications();
     addMedicationForm.reset();
   } else {
-    alert('Failed to add medication');
+    alert('Failed to add medication.');
   }
 });
-
 
 function attachDeleteHandlers() {
   document.querySelectorAll('.delete-btn').forEach((btn) =>
@@ -115,14 +108,13 @@ function attachDeleteHandlers() {
   );
 }
 
-
 addBtn.addEventListener('click', () => {
   addMedicationForm.style.display =
     addMedicationForm.style.display === 'none' ? 'block' : 'none';
 });
 
-
 logoutBtn.addEventListener('click', () => {
   token = null;
   showLogin();
 });
+
